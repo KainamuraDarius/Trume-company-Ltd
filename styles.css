@@ -1407,12 +1407,22 @@ main:has(.founders-section) .founders-section {
   .home-intro > p {
     margin-bottom: 35px;
   }
+  .home-page main {
+    overflow-x: clip;
+  }
   .home-cards {
-    display: block;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    width: 100%;
   }
   .feature-card {
+    width: 100%;
+    min-width: 0;
     min-height: 285px;
     padding: 36px 7vw;
+  }
+  .feature-card h3 {
+    overflow-wrap: anywhere;
   }
   .card-number {
     margin-bottom: 58px;
