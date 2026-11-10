@@ -12,6 +12,10 @@
 html {
   scroll-behavior: smooth;
 }
+img,
+svg {
+  max-width: 100%;
+}
 body {
   margin: 0;
   background: var(--cream);
@@ -1337,6 +1341,10 @@ main:has(.founders-section) .founders-section {
   line-height: 1.75;
 }
 @media (max-width: 760px) {
+  html,
+  body {
+    overflow-x: hidden;
+  }
   .site-header {
     height: 70px;
     padding: 0 7vw;
@@ -1352,6 +1360,10 @@ main:has(.founders-section) .founders-section {
     color: var(--ink);
     flex-direction: column;
     align-items: flex-start;
+    gap: 18px;
+    max-height: calc(100vh - 70px);
+    overflow-y: auto;
+    border-bottom: 1px solid #c6c9c2;
   }
   .nav.open {
     display: flex;
@@ -1375,7 +1387,18 @@ main:has(.founders-section) .founders-section {
     background-position: 58% center;
   }
   .home-hero h1 {
-    font-size: 52px;
+    font-size: clamp(42px, 13vw, 52px);
+  }
+  .hero-actions {
+    flex-wrap: wrap;
+    gap: 16px 22px;
+  }
+  .hero-location {
+    right: 7vw;
+    bottom: 22px;
+  }
+  .hero-location span {
+    margin-left: 18px;
   }
   .home-intro {
     padding: 75px 7vw;
@@ -1528,6 +1551,12 @@ main:has(.founders-section) .founders-section {
     transform-origin: left top;
     margin-bottom: 10px;
   }
+  .download-links {
+    gap: 10px;
+  }
+  .download-links a {
+    min-height: 46px;
+  }
   .purpose-grid article {
     padding: 30px 0;
   }
@@ -1548,6 +1577,49 @@ main:has(.founders-section) .founders-section {
   }
   .contact-panel > * + * {
     margin-top: 30px;
+  }
+}
+
+@media (max-width: 420px) {
+  .site-header,
+  .home-hero,
+  .page-hero,
+  .content,
+  .truehome-download,
+  footer {
+    padding-left: 6vw;
+    padding-right: 6vw;
+  }
+  .home-hero {
+    min-height: 640px;
+    padding-top: 112px;
+    padding-bottom: 64px;
+  }
+  .hero-location {
+    display: none;
+  }
+  .feature-card {
+    padding-left: 6vw;
+    padding-right: 6vw;
+  }
+  .card-arrow {
+    right: 6vw;
+  }
+  .values-grid article,
+  .serve-grid article,
+  .contact-panel,
+  .contact-form {
+    padding: 24px;
+  }
+  .download-links {
+    display: grid;
+    grid-template-columns: 1fr;
+  }
+  .download-links a {
+    justify-content: center;
+  }
+  .social-links a {
+    padding: 9px 10px;
   }
 }
 .nav {
@@ -1731,5 +1803,12 @@ body {
   }
   .intro {
     font-size: 16px;
+  }
+}
+
+@media (max-width: 420px) {
+  footer {
+    padding-left: 6vw;
+    padding-right: 6vw;
   }
 }
