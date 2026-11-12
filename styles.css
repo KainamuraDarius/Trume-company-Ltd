@@ -149,6 +149,7 @@ a {
 }
 .home-hero h1,
 .page-hero h1,
+.solution-band h1,
 h2 {
   letter-spacing: -0.065em;
   line-height: 0.99;
@@ -1295,6 +1296,7 @@ main:has(.founders-section) .founders-section {
   background-position: center;
   background-size: cover;
 }
+.solution-band h1,
 .solution-band h2 {
   font-size: clamp(38px, 5vw, 70px);
   max-width: 750px;
@@ -1855,4 +1857,8 @@ body {
     padding-left: 6vw;
     padding-right: 6vw;
   }
+}
+
+.not-found-page .page-hero .intro {
+  margin: 24px 0 32px;
 }
