@@ -2,6 +2,8 @@
 
 The official marketing website for **Trume Company Limited**, a Ugandan property-technology company building clearer, more trusted digital property experiences. The site presents Trume's mission, solutions, partnerships, insights, and **Truehome**—its flagship property marketplace.
 
+> **Looking after this website?** Start with the [handbook](docs/README.md): a [content guide](docs/content-guide.md) for editing the site and a [technical guide](docs/technical-guide.md) for hosting, backups and troubleshooting.
+
 ## Overview
 
 Trume is focused on making it simpler to find, list, rent, buy, and manage property in Uganda. This repository contains the public website:
