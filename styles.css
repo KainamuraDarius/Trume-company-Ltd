@@ -46,12 +46,12 @@ a {
   display: block;
   width: 56px;
   height: 56px;
-  overflow: hidden;
-  background: url("assets/Trume%20Company%20Ltd%20%E2%80%94%20Logo@2x.png")
-    center / contain no-repeat;
-  color: transparent;
+  background: currentColor;
+  color: var(--ink);
   font-size: 0;
   line-height: 0;
+  -webkit-mask: url("assets/trume-mark.svg") center / contain no-repeat;
+  mask: url("assets/trume-mark.svg") center / contain no-repeat;
 }
 .brand span:first-child {
   letter-spacing: 0;
@@ -63,10 +63,8 @@ a {
   position: relative;
   width: 62px;
   height: 68px;
-  overflow: visible;
-  background: url("assets/Trume%20Company%20Ltd%20%E2%80%94%20Logo@2x.png")
-    50% 37% / 176px no-repeat;
-  color: transparent;
+  background: currentColor;
+  color: var(--ink);
   font-size: 0;
   line-height: 0;
 }
@@ -75,6 +73,9 @@ a {
 }
 .site-header .brand .brand-dot {
   color: transparent;
+}
+.home-page .site-header .brand {
+  color: white;
 }
 .nav {
   display: flex;
@@ -125,7 +126,7 @@ a {
 .home-hero {
   min-height: 760px;
   color: white;
-  background: url("assets/kampala-skyline.jpg") center/cover no-repeat;
+  background: #173b30 url("assets/kampala-skyline.jpg") center/cover no-repeat;
   position: relative;
   display: flex;
   align-items: center;
@@ -760,9 +761,14 @@ main:has(.founders-section) .founders-section {
   margin: 0;
 }
 .founder-grid {
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 32px;
   width: 100%;
+}
+@media (max-width: 1100px) and (min-width: 761px) {
+  .founder-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
 }
 .truehome-download {
   padding: 95px 11vw;
@@ -1150,6 +1156,33 @@ main:has(.founders-section) .founders-section {
     10px "DM Mono",
     monospace;
   line-height: 1.5;
+}
+.form-status {
+  display: none;
+  grid-column: 1 / -1;
+  margin: 0;
+  padding: 11px 13px;
+  font-size: 13px;
+  font-weight: 700;
+}
+.form-status.success,
+.form-status.error {
+  display: block;
+}
+.form-status.success {
+  background: #e0efcf;
+  color: #31561f;
+}
+.form-status.error {
+  background: #f7d9d1;
+  color: #8a2c1b;
+}
+.form-honeypot {
+  position: absolute;
+  left: -9999px;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
 }
 .map-section {
   padding-top: 0;
@@ -1668,6 +1701,7 @@ footer::before {
   width: 72px;
   height: 72px;
   letter-spacing: 0;
+  color: white;
 }
 .footer-main .brand::after {
   display: none;

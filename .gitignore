@@ -1,0 +1,7 @@
+# Server-specific credentials and runtime files
+admin/config.php
+admin/uploads/
+admin/data/*.sqlite
+
+# Local tooling
+.DS_Store

@@ -11,6 +11,71 @@ document
   );
 document.getElementById("year").textContent = new Date().getFullYear();
 
+const cmsPage = document.body.dataset.cmsPage;
+if (cmsPage) {
+  fetch(`api/content.php?page=${encodeURIComponent(cmsPage)}`)
+    .then((response) => (response.ok ? response.json() : null))
+    .then((content) => {
+      if (!content) return;
+      document.querySelectorAll("[data-cms-field]").forEach((element) => {
+        const value = content.page[element.dataset.cmsField];
+        if (typeof value === "string" && value) element.textContent = value;
+      });
+      document.querySelectorAll("[data-site-setting]").forEach((element) => {
+        const value = content.settings[element.dataset.siteSetting];
+        if (!value) return;
+        if (element.tagName === "A") {
+          const setting = element.dataset.siteSetting;
+          element.href = setting.includes("email") ? `mailto:${value}` : setting.includes("phone") ? `tel:${value.replace(/\s/g, "")}` : value;
+        }
+        element.textContent = value;
+      });
+      const contactRecipient = document.getElementById("contact-form");
+      if (contactRecipient && content.settings.company_email) {
+        contactRecipient.dataset.gmailRecipient = content.settings.company_email;
+      }
+    })
+    .catch(() => {});
+}
+
+const formStatus = document.getElementById("form-status");
+const formResult = new URLSearchParams(window.location.search);
+if (formStatus && formResult.has("sent")) {
+  formStatus.textContent = "Thank you. Your message has been sent to the Trume team.";
+  formStatus.classList.add("success");
+} else if (formStatus && formResult.has("error")) {
+  formStatus.textContent = "Please complete all required fields and try again.";
+  formStatus.classList.add("error");
+}
+
+const contactForm = document.getElementById("contact-form");
+contactForm?.addEventListener("submit", (event) => {
+  if (!contactForm.checkValidity()) return;
+
+  event.preventDefault();
+  const fields = new FormData(contactForm);
+  const recipient = contactForm.dataset.gmailRecipient;
+  const name = fields.get("full_name")?.toString().trim() || "";
+  const email = fields.get("email")?.toString().trim() || "";
+  const phone = fields.get("phone")?.toString().trim() || "Not provided";
+  const subject = fields.get("subject")?.toString().trim() || "Website enquiry";
+  const message = fields.get("message")?.toString().trim() || "";
+  const body = `Name: ${name}\nEmail: ${email}\nPhone: ${phone}\n\nMessage:\n${message}`;
+  const gmailUrl = new URL("https://mail.google.com/mail/");
+
+  gmailUrl.search = new URLSearchParams({
+    view: "cm",
+    fs: "1",
+    to: recipient,
+    su: subject,
+    body,
+  }).toString();
+
+  formStatus.textContent = "Opening Gmail so you can review and send your message.";
+  formStatus.className = "form-status success";
+  window.location.assign(gmailUrl.toString());
+});
+
 const typewriterHeading = document.querySelector(".typewriter-heading");
 if (typewriterHeading) {
   const pieces = [...typewriterHeading.querySelectorAll("[data-type]")];

@@ -13,7 +13,7 @@
     />
     <link rel="stylesheet" href="styles.css" />
   </head>
-  <body class="contact-page">
+  <body class="contact-page" data-cms-page="contact">
     <header class="site-header">
       <a class="brand" href="index.html"
         ><span>TRU</span>ME<span class="brand-dot">.</span></a
@@ -41,9 +41,9 @@
         </div>
       </section>
       <section class="content contact-intro">
-        <p class="section-label">GET IN TOUCH</p>
+        <p class="section-label" data-cms-field="intro_label">GET IN TOUCH</p>
         <h2>We would love to hear from you.</h2>
-        <p>
+        <p data-cms-field="intro_body">
           Whether you have a question, want to partner with us or want to learn
           more about Truehome, the Trume team is ready to connect.
         </p>
@@ -64,7 +64,7 @@
           </div>
           <div>
             <p class="contact-detail-label">OFFICIAL EMAIL</p>
-            <a href="mailto:ramzyhadah@gmail.com">ramzyhadah@gmail.com</a>
+            <a href="mailto:ramzyhadah@gmail.com" data-site-setting="company_email">ramzyhadah@gmail.com</a>
             >
           </div>
           <div>
@@ -101,14 +101,24 @@
           </div>
         </aside>
         <form
+          id="contact-form"
           class="contact-form"
           action="mailto:ramzyhadah@gmail.com"
           method="post"
-          enctype="text/plain"
+          data-gmail-recipient="ramzyhadah@gmail.com"
         >
           <p class="section-label">SEND A MESSAGE</p>
+          <p id="form-status" class="form-status" aria-live="polite"></p>
+          <input
+            class="form-honeypot"
+            type="text"
+            name="website"
+            tabindex="-1"
+            autocomplete="off"
+            aria-hidden="true"
+          />
           <label
-            >Full name<input type="text" name="full-name" required
+            >Full name<input type="text" name="full_name" required
           /></label>
           <label
             >Email address<input type="email" name="email" required
@@ -121,10 +131,7 @@
           <button class="button button-dark" type="submit">
             Send message <span>&rarr;</span>
           </button>
-          <small
-            >Submitting opens your default email application with your message
-            addressed to Trume.</small
-          >
+          <small>After submitting, Gmail opens with your message ready for review and sending.</small>
         </form>
       </section>
       <section class="content map-section">
