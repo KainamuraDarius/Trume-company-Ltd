@@ -1,7 +1,9 @@
-# Server-specific credentials and runtime files
-admin/config.php
-admin/uploads/
-admin/data/*.sqlite
+# Server-specific settings (copy config.example.php to config.php)
+config.php
+
+# Images uploaded through Trume Admin live only on the server
+uploads/*
+!uploads/index.html
 
 # Local tooling
 .DS_Store

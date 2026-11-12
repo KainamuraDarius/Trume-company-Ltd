@@ -1,63 +1,138 @@
 <?php
 declare(strict_types=1);
+require __DIR__ . '/includes/site.php';
+$content = page_content('contact');
+render_header([
+    'title' => $content['page_title'],
+    'description' => $content['meta_description'],
+    'path' => 'contact.php',
+    'body_class' => 'contact-page',
+    'active' => 'contact',
+]);
+?>
+    <main>
+<?php render_hero($content); ?>
+      <section class="content contact-intro">
+        <p class="section-label"><?= e($content['intro_label']) ?></p>
+        <h2><?= rich($content['intro_heading']) ?></h2>
+        <?= paragraphs($content['intro_body'], '        ') ?>
+      </section>
+      <section class="content contact-layout">
+        <aside class="contact-details">
+          <div>
+            <p class="contact-detail-label">OFFICE</p>
+            <address>
+              <?= implode('<br />', array_map('e', address_lines())) ?>
 
-// Where website enquiries are delivered. Change this to info@truehome.com.ug
-// once that mailbox has been created in cPanel.
-const RECIPIENT = 'ramzyhadah@gmail.com';
-// Must be an address on this hosting account's domain, or many inboxes will
-// treat the message as spam. Visitors are reached through Reply-To instead.
-const SENDER = 'no-reply@truehome.com.ug';
-
-function back(string $result): never
-{
-    header('Location: contact.html?' . $result . '#contact-form', true, 303);
-    exit;
-}
-
-if (($_SERVER['REQUEST_METHOD'] ?? '') !== 'POST') {
-    header('Location: contact.html', true, 303);
-    exit;
-}
-
-// Hidden field that only bots fill in: pretend success and discard.
-if (trim((string) ($_POST['website'] ?? '')) !== '') {
-    back('sent=1');
-}
-
-$field = static fn (string $key): string => trim((string) ($_POST[$key] ?? ''));
-$name = $field('full_name');
-$email = $field('email');
-$phone = $field('phone');
-$subject = $field('subject');
-$message = $field('message');
-
-$singleLine = static fn (string $value): bool => !preg_match('/[\r\n]/', $value);
-
-if (
-    $name === '' || $subject === '' || $message === ''
-    || !filter_var($email, FILTER_VALIDATE_EMAIL)
-    || !$singleLine($name) || !$singleLine($email) || !$singleLine($subject) || !$singleLine($phone)
-    || mb_strlen($name) > 160 || mb_strlen($email) > 190 || mb_strlen($phone) > 40
-    || mb_strlen($subject) > 200 || mb_strlen($message) > 10000
-) {
-    back('error=1');
-}
-
-$body = "New enquiry from the Trume website\n\n"
-    . "Name:    {$name}\n"
-    . "Email:   {$email}\n"
-    . 'Phone:   ' . ($phone !== '' ? $phone : 'Not provided') . "\n"
-    . "Subject: {$subject}\n\n"
-    . "Message:\n{$message}\n";
-
-$headers = [
-    'From' => 'Trume Website <' . SENDER . '>',
-    'Reply-To' => $email,
-    'Content-Type' => 'text/plain; charset=UTF-8',
-    'X-Mailer' => 'Trume website',
-];
-
-$encodedSubject = '=?UTF-8?B?' . base64_encode('Website enquiry: ' . $subject) . '?=';
-$sent = mail(RECIPIENT, $encodedSubject, $body, $headers, '-f' . SENDER);
-
-back($sent ? 'sent=1' : 'error=send');
+            </address>
+            <a
+              href="https://www.google.com/maps/search/?api=1&amp;query=<?= e(urlencode(setting('company_address'))) ?>"
+              target="_blank"
+              rel="noopener noreferrer"
+              >Get directions &nearr;</a
+            >
+          </div>
+          <div>
+            <p class="contact-detail-label">OFFICIAL EMAIL</p>
+            <a href="mailto:<?= e(setting('company_email')) ?>"><?= e(setting('company_email')) ?></a>
+          </div>
+          <div>
+            <p class="contact-detail-label">PHONE</p>
+            <p>
+<?php if (setting('contact_person') !== ''): ?>
+              <strong><?= e(setting('contact_person')) ?></strong>
+<?php endif; ?>
+<?php foreach (split_list(setting('contact_phones')) as $phone): ?>
+              <br /><a href="<?= e(tel_href($phone)) ?>"><?= e($phone) ?></a>
+<?php endforeach; ?>
+            </p>
+          </div>
+          <div>
+            <p class="contact-detail-label">ONLINE</p>
+            <a
+              href="<?= e(setting('truehome_url')) ?>"
+              target="_blank"
+              rel="noopener noreferrer"
+              ><?= e(preg_replace('#^https?://(www\.)?#', '', rtrim(setting('truehome_url'), '/'))) ?> &nearr;</a
+            >
+            <div class="social-links">
+              <a
+                href="<?= e(setting('linkedin_url')) ?>"
+                target="_blank"
+                rel="noopener noreferrer"
+                >LinkedIn &nearr;</a
+              >
+              <a
+                href="<?= e(setting('whatsapp_url')) ?>"
+                target="_blank"
+                rel="noopener noreferrer"
+                >WhatsApp &nearr;</a
+              >
+            </div>
+          </div>
+        </aside>
+        <form
+          id="contact-form"
+          class="contact-form"
+          action="send-message.php"
+          method="post"
+        >
+          <p class="section-label">SEND A MESSAGE</p>
+          <p id="form-status" class="form-status" aria-live="polite"></p>
+          <input
+            class="form-honeypot"
+            type="text"
+            name="website"
+            tabindex="-1"
+            autocomplete="off"
+            aria-hidden="true"
+          />
+          <label
+            >Full name<input type="text" name="full_name" autocomplete="name" required
+          /></label>
+          <label
+            >Email address<input type="email" name="email" autocomplete="email" required
+          /></label>
+          <label>Phone number (optional)<input type="tel" name="phone" autocomplete="tel" /></label>
+          <label>Subject<input type="text" name="subject" required /></label>
+          <label
+            >Message<textarea name="message" rows="6" required></textarea>
+          </label>
+          <button class="button button-dark" type="submit">
+            Send message <span>&rarr;</span>
+          </button>
+          <small>We will get back to you by email.</small>
+        </form>
+      </section>
+      <section class="content map-section">
+        <p class="section-label">OUR LOCATION</p>
+        <div class="map-frame">
+          <iframe
+            title="Map to <?= e(short_address()) ?>"
+            src="https://www.google.com/maps?q=<?= e(rawurlencode(setting('company_address'))) ?>&amp;output=embed"
+            loading="lazy"
+          ></iframe>
+        </div>
+      </section>
+      <section class="content">
+        <div class="contact-panel">
+          <div>
+            <p class="section-label">TRUME COMPANY LIMITED</p>
+            <h2>Technology, real estate and digital innovation.</h2>
+          </div>
+          <div>
+            <p>
+              Visit the Truehome marketplace to begin your property journey or
+              contact us to explore a partnership.
+            </p>
+            <a
+              href="<?= e(setting('truehome_url')) ?>"
+              target="_blank"
+              rel="noopener noreferrer"
+              >Explore Truehome &rarr;</a
+            >
+          </div>
+        </div>
+      </section>
+    </main>
+<?php render_footer(true);
