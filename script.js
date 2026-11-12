@@ -11,33 +11,6 @@ document
   );
 document.getElementById("year").textContent = new Date().getFullYear();
 
-const cmsPage = document.body.dataset.cmsPage;
-if (cmsPage) {
-  fetch(`api/content.php?page=${encodeURIComponent(cmsPage)}`)
-    .then((response) => (response.ok ? response.json() : null))
-    .then((content) => {
-      if (!content) return;
-      document.querySelectorAll("[data-cms-field]").forEach((element) => {
-        const value = content.page[element.dataset.cmsField];
-        if (typeof value === "string" && value) element.textContent = value;
-      });
-      document.querySelectorAll("[data-site-setting]").forEach((element) => {
-        const value = content.settings[element.dataset.siteSetting];
-        if (!value) return;
-        if (element.tagName === "A") {
-          const setting = element.dataset.siteSetting;
-          element.href = setting.includes("email") ? `mailto:${value}` : setting.includes("phone") ? `tel:${value.replace(/\s/g, "")}` : value;
-        }
-        element.textContent = value;
-      });
-      const contactRecipient = document.getElementById("contact-form");
-      if (contactRecipient && content.settings.company_email) {
-        contactRecipient.dataset.gmailRecipient = content.settings.company_email;
-      }
-    })
-    .catch(() => {});
-}
-
 const formStatus = document.getElementById("form-status");
 const formResult = new URLSearchParams(window.location.search);
 if (formStatus && formResult.has("sent")) {
